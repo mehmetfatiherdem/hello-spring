@@ -1,10 +1,12 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.TodoDTO;
 import com.example.demo.exception.TodoNotFoundException;
 import com.example.demo.model.Todo;
 import com.example.demo.repository.TodoRepository;
-import org.springframework.web.bind.annotation.*;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
@@ -40,9 +42,27 @@ public class TodoController {
         }).orElseThrow(()-> new TodoNotFoundException(id));
     }
 
+    //TODO: handle this partial update better
+    @PatchMapping( "/todos/{id}")
+    Todo updateTodo(@RequestBody TodoDTO dto, @PathVariable Long id){
+         return repo.findById(id).map(todo->{
+              if(dto.getDescription() != null){
+                  todo.setDescription(dto.getDescription());
+              } else if (dto.getTitle() != null) {
+                  todo.setTitle(dto.getTitle());
+              } else if (dto.getDone() != null) {
+                  todo.setDone(dto.getDone());
+              }
+            return  repo.save(todo);
+
+         }).orElseThrow(()-> new TodoNotFoundException(id));
+
+    }
+
     @DeleteMapping("/todos/{id}")
-    void rmTodo(@PathVariable Long id){
+    ResponseEntity<?> rmTodo(@PathVariable Long id){
         repo.deleteById(id);
+        return  ResponseEntity.ok("Todo deleted..");
     }
 
 }

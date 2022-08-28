@@ -44,7 +44,6 @@
 			<artifactId>spring-data-rest-core</artifactId>
 		</dependency>
 
-
 	</dependencies>
 
 	<build>
