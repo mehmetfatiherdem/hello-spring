@@ -33,15 +33,17 @@ public class TodoController {
     }
 
     @PutMapping("/todos/{id}")
-    Todo replaceTodo(@RequestBody Todo newTodo, @PathVariable Long id){
-        return repo.findById(id).map(todo->{
-            todo.setTitle(newTodo.getTitle());
-            todo.setDescription(newTodo.getDescription());
-            todo.setDone(newTodo.getDone());
-           return repo.save(todo);
-        }).orElseThrow(()-> new TodoNotFoundException(id));
+    ResponseEntity<?> replaceTodo(@RequestBody Todo newTodo, @PathVariable Long id){
+       Todo todo = repo.findById(id).orElseThrow(()-> new TodoNotFoundException(id));
+
+        todo.setTitle(newTodo.getTitle());
+        todo.setDescription(newTodo.getDescription());
+        todo.setDone(newTodo.getDone());
+        repo.save(todo);
+
+        return ResponseEntity.ok("Todo with the ID of " + id + " has been replaced with the info you entered");
     }
-    
+
     @PatchMapping( "/todos/{id}")
     ResponseEntity<?> updateTodo(@RequestBody TodoDTO dto, @PathVariable Long id){
         Todo todo = repo.findById(id).orElseThrow(()-> new TodoNotFoundException(id));
