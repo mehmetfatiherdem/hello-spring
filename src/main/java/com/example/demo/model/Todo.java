@@ -31,6 +31,7 @@ public class Todo {
     }
 
     public void setTitle(String title){
+        if(title == null) return;
         this.title = title;
     }
 
@@ -39,6 +40,7 @@ public class Todo {
     }
 
     public void setDescription(String description){
+        if(description == null) return;
         this.description = description;
     }
 
@@ -47,6 +49,7 @@ public class Todo {
     }
 
     public void setDone(Boolean isDone) {
+        if(isDone == null) return;
         this.isDone = isDone;
     }
 }

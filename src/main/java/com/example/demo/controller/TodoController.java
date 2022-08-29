@@ -41,20 +41,17 @@ public class TodoController {
            return repo.save(todo);
         }).orElseThrow(()-> new TodoNotFoundException(id));
     }
-
-    //TODO: handle this partial update better
+    
     @PatchMapping( "/todos/{id}")
-    Todo updateTodo(@RequestBody TodoDTO dto, @PathVariable Long id){
-         return repo.findById(id).map(todo->{
-              if(dto.getDescription() != null){
-                  todo.setDescription(dto.getDescription());
-              } else if (dto.getTitle() != null) {
-                  todo.setTitle(dto.getTitle());
-              }
-            return  repo.save(todo);
+    ResponseEntity<?> updateTodo(@RequestBody TodoDTO dto, @PathVariable Long id){
+        Todo todo = repo.findById(id).orElseThrow(()-> new TodoNotFoundException(id));
 
-         }).orElseThrow(()-> new TodoNotFoundException(id));
+        todo.setTitle(dto.getTitle());
+        todo.setDescription(dto.getDescription());
 
+        repo.save(todo);
+
+        return ResponseEntity.ok("Todo with the ID of " + id + " has been updated");
     }
 
     @PatchMapping("/todos/{id}/check")

@@ -1,8 +1,5 @@
 package com.example.demo.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
-// @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TodoDTO {
     private String title;
     private String description;
@@ -11,9 +8,9 @@ public class TodoDTO {
     public TodoDTO(){}
 
     public TodoDTO(String title, String description, Boolean isDone){
-        this.title = title != null ? title : null;
-        this.description =  description != null ? description : null;
-        this.isDone =  isDone != null ? isDone : null;
+        this.title = title;
+        this.description =  description;
+        this.isDone =  isDone;
     }
 
     public String getTitle() {
