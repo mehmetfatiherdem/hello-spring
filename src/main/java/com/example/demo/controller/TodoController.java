@@ -50,13 +50,22 @@ public class TodoController {
                   todo.setDescription(dto.getDescription());
               } else if (dto.getTitle() != null) {
                   todo.setTitle(dto.getTitle());
-              } else if (dto.getDone() != null) {
-                  todo.setDone(dto.getDone());
               }
             return  repo.save(todo);
 
          }).orElseThrow(()-> new TodoNotFoundException(id));
 
+    }
+
+    @PatchMapping("/todos/{id}/check")
+    ResponseEntity<?> completeTask(@PathVariable Long id, @RequestParam Boolean done){
+        Todo todo = repo.findById(id).orElseThrow(() -> new TodoNotFoundException(id));
+
+        todo.setDone(done);
+
+        repo.save(todo);
+
+        return ResponseEntity.ok("Done check has been updated...");
     }
 
     @DeleteMapping("/todos/{id}")
